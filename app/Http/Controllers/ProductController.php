@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index () {
-        return 'This is the list of products FROM CONTROLLER';
+        return view ('products.index');
     }
 
     public function create() {
@@ -19,10 +19,10 @@ class ProductController extends Controller
     }
 
     public function show ($product) {
-        return 'Showing product with id {$product}';
+        return view ('products.show');
     }
     public function edit ($product) {
-        return 'Showing product with the form to edit the product with id {$product}';
+        return "Showing product with the form to edit the product with id {$product}";
     }
     public function update ($product) {
         //
@@ -31,4 +31,4 @@ class ProductController extends Controller
         //
     }
 
-}
+}//usar comillas dobles para que php permita la interpolación, con comilla simple trata todo como texto literalmente

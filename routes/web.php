@@ -2,10 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MainController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// })->name('main');
+Route::get('/', [MainController::class, 'index'])->name('main');
 
 Route::get('products', [ProductController::class, 'index'])->name('products.index'); // el mensaje lo estoy retornando en el controlador, llamo la funcion del controlador con el ProductController@index--> funciona solo en laravel 7 hacia abajo
  //para laravel 7 hacia arriba se usa --> Route::get('/', [NameController::class, 'helo']); se manda en un arreglo la primera posicion es el espacio de nombre del controlador y la segunda es el nombre de la acción dentro del controlador (o nombre de la funcion en este caso) el '/' se refiere a la carpeta raiz, en este caso public
