@@ -35,6 +35,25 @@ class ProductController extends Controller
         //     'status'=> request()->status,
         // ]);
 
+        $rules = [
+            'title' => ['required', 'max:255'],
+            'description' => ['required', 'max:1000'],
+            'price' => ['required', 'min:1'],
+            'stock' => ['required', 'min:0'],
+            'status' => ['required', 'in:available,unavailable'],
+        ];
+
+        request()->validate($rules);
+
+        if (request()->status == 'available' && request()->stock == 0){
+            ////put agrega el mensaje de error a la session pero lo deja ahí, es poco util
+            //session()->put('error', 'If available must have stock');
+            ////flash solo establece el valor en la session, si me muevo, refresco, voy a otro lado, el elemento desaparece
+            session()->flash('error', 'If available must have stock');
+
+            return redirect()->back();
+        }
+
         $product = Product::create(request()->all()); //aun asi apunte a todos solo va a tener en cuenta los que haya definido en el fillable
 
         // return redirect()->back(); ////retorna a la ubicación anterior
@@ -68,6 +87,17 @@ class ProductController extends Controller
 
     }
     public function update ($product) {
+
+        $rules = [
+            'title' => ['required', 'max:255'],
+            'description' => ['required', 'max:1000'],
+            'price' => ['required', 'min:1'],
+            'stock' => ['required', 'min:0'],
+            'status' => ['required', 'in:available,unavailable'],
+        ];
+
+        request()->validate($rules);
+
         $product = Product::findOrFail($product); //mirar si si existen
 
         $product->update(request()->all());//update recibe toda la info necesario para actualizar
