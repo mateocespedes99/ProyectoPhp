@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', [MainController::class, 'index'])->name('main');
 
@@ -29,3 +30,5 @@ Route::get('products/{product}/edit',[ProductController::class, 'edit'])->name('
 Route::match(['put', 'patch'], 'products/{product}', [ProductController::class, 'update'])->name('products.update');
 
 Route::delete('products/{product}/edit', [ProductController::class, 'destroy'])->name('products.destroy');
+
+Route::resource('categories', CategoryController::class);

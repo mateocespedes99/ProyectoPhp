@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat($maxDecimals = 2, $min = 3, $max = 100),
             'stock' => $this->faker->numberBetween(1, 10),
             'status' => $this->faker->randomElement(['available', 'unavaliable']),
+            'category_id' => Category::inRandomOrder()->first()->id, // Asigna una categoría existente aleatoria
         ];
     }
 }
