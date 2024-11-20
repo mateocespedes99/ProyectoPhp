@@ -31,4 +31,20 @@ Route::match(['put', 'patch'], 'products/{product}', [ProductController::class, 
 
 Route::delete('products/{product}/edit', [ProductController::class, 'destroy'])->name('products.destroy');
 
-Route::resource('categories', CategoryController::class);
+
+
+Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+
+Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
+
+Route::post('categories',[CategoryController::class, 'store'])->name('categories.store');
+
+Route::get('categories/{category}',[CategoryController::class, 'show'])->name('categories.show');
+
+Route::get('categories/{category}/edit',[CategoryController::class, 'edit'])->name('categories.edit');
+
+Route::match(['put', 'patch'], 'categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+
+Route::delete('categories/{category}/edit', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+

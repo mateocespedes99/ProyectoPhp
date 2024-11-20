@@ -1,10 +1,9 @@
-{{-- resources/views/categories/edit.blade.php --}}
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
     <h1>Editar Categoría</h1>
 
-    <form action="{{ route('categories.update', $category) }}" method="POST">
+    <form method="POST" action="{{ route('categories.update', ['category' => $category->id]) }}">
         @csrf
         @method('PUT')
         <div>
