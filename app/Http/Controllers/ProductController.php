@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use App\Models\Category;
 
 
 class ProductController extends Controller
@@ -21,45 +22,41 @@ class ProductController extends Controller
 
     }
 
-    public function create() {
-        return view('products.create');
+    public function create()
+{
+    $categories = Category::all();
 
+    return view('products.create')->with([
+        'categories' => $categories,
+    ]);
+}
+
+    public function store(Request $request)
+{
+    // Validación de los datos
+    $rules = [
+        'title' => ['required', 'max:255'],
+        'description' => ['required', 'max:1000'],
+        'price' => ['required', 'min:1'],
+        'stock' => ['required', 'min:0'],
+        'status' => ['required', 'in:available,unavailable'],
+        'category_id' => ['required', 'exists:categories,id'], // Asegurarse de que la categoría exista
+    ];
+
+    $validatedData = $request->validate($rules);
+
+    // Validación adicional para el estado y stock
+    if ($validatedData['status'] == 'available' && $validatedData['stock'] == 0) {
+        session()->flash('error', 'If available, the product must have stock.');
+        return redirect()->back();
     }
 
-    public function store() {
-        // $product = Product::create([
-        //     'title'=> request()->title, //helper que sirve para acceder a la información de esa petición
-        //     'description'=> request()->description,
-        //     'price'=> request()->price,
-        //     'stock'=> request()->stock,
-        //     'status'=> request()->status,
-        // ]);
+    // Crear el producto
+    $product = Product::create($validatedData); // Utiliza los datos validados para crear el producto
 
-        $rules = [
-            'title' => ['required', 'max:255'],
-            'description' => ['required', 'max:1000'],
-            'price' => ['required', 'min:1'],
-            'stock' => ['required', 'min:0'],
-            'status' => ['required', 'in:available,unavailable'],
-        ];
+    return redirect()->route('products.index'); // Redirigir a la lista de productos
+}
 
-        request()->validate($rules);
-
-        if (request()->status == 'available' && request()->stock == 0){
-            ////put agrega el mensaje de error a la session pero lo deja ahí, es poco util
-            //session()->put('error', 'If available must have stock');
-            ////flash solo establece el valor en la session, si me muevo, refresco, voy a otro lado, el elemento desaparece
-            session()->flash('error', 'If available must have stock');
-
-            return redirect()->back();
-        }
-
-        $product = Product::create(request()->all()); //aun asi apunte a todos solo va a tener en cuenta los que haya definido en el fillable
-
-        // return redirect()->back(); ////retorna a la ubicación anterior
-        // return redirect()->action([MainController::class, 'index']); ////retorna la vista al metodo del controlador
-        return redirect()->route('products.index'); //retorna la vista a una ruta especifica
-    }
 
     public function show ($product) {
 
@@ -82,7 +79,8 @@ class ProductController extends Controller
     public function edit ($product) {
 
         return view('products.edit')->with([
-            'product' => Product::findOrFail($product), //mirar si si existen
+            'product' => Product::findOrFail($product), //producto a editar, busco si existe
+            'categories' => Category::all(), //todas las categorias
         ]);
 
     }
@@ -94,6 +92,7 @@ class ProductController extends Controller
             'price' => ['required', 'min:1'],
             'stock' => ['required', 'min:0'],
             'status' => ['required', 'in:available,unavailable'],
+            'category_ id' => ['nullable', 'exists:categories,id']
         ];
 
         request()->validate($rules);

@@ -29,9 +29,18 @@
             <option value="available">Available</option>
             <option value="unavailable">Unavaliable</option>
         </select>
-        <div class="form-row">
+    </div>
+    <div class="form-row">
+        <label>Category</label>
+        <select class="custom-select" name="category_id">
+            <option value="" selected>Select...</option>
+            @foreach ($categories as $category)
+            <option value="{{ $category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-row">
             <button type="submit" class="btn btn-primary btn-lg">Create Product</button>
-        </div>
     </div>
 
     </form>

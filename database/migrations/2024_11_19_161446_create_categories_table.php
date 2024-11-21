@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Nombre de la categoría
             $table->string('description'); // Descripción de la categoría
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade'); // Relación de subcategorías
+            $table->foreignId('parent_id')->nullable()->constrained('categories'); // Relación de subcategorías
             $table->string('slug'); //Un nombre amigable para URLs, como de administracion, como "ropa-de-hombre" para la categoría "Ropa de Hombre".
             $table->timestamps();
         });

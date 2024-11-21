@@ -23,11 +23,11 @@
      </div>
      <div class="form-row">
         <label>Price</label>
-        <input class="form-control" type="number" min="1.00" name="price" value="{{ $product->price }}" >
+        <input class="form-control" type="number" step="0.01" min="1.00" name="price" value="{{ $product->price }}">
      </div>
      <div class="form-row">
         <label>Stock</label>
-        <input class="form-control" type="number" name="stock" value="{{ $product->stock }}">
+        <input class="form-control" type="number" step="0.01" min="0" name="stock" value="{{ $product->stock }}">
      </div>
      <div class="form-row">
         <label>Status</label>
@@ -40,6 +40,15 @@
             <!-- si el estado actual del producto coincide con available, si si es selected, sino se pone algo vacio para indicar la condicion final -->
 
         </select>
+        <div class="form-row">
+        <label>Category</label>
+        <select class="custom-select" name="category_id">
+            <option value="" selected>Select...</option>
+            @foreach ($categories as $category)
+            <option value="{{ $category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+    </div>
         <div class="form-row">
             <button type="submit" class="btn btn-primary btn-lg">Edit Product</button>
         </div>
