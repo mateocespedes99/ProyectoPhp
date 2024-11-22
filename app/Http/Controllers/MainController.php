@@ -3,11 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Category;
 
 class MainController extends Controller
 {
-    public function index () {
-        return view ('welcome');
+    public function index()
+    {
+        $categories = Category::with('products')->get();
+        $uncategorizedProducts = Product::whereNull('category_id')->get();
+
+        return view('main', [
+            'categories' => $categories,
+            'uncategorizedProducts' => $uncategorizedProducts,
+        ]);
     }
 
 }

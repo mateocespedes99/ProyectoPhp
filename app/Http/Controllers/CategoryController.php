@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
+use Illuminate\Support\Str;
+
 
 class CategoryController extends Controller
 {
@@ -22,12 +24,21 @@ class CategoryController extends Controller
         $rules = [
             'name' => ['required', 'max:255'],
             'description' => ['required', 'max:1000'],
+            'parent_id' => ['nullable', 'exists:categories,id'], // Validar que la categoría padre exista
         ];
 
         request()->validate($rules);
 
-        $category = Category::create(request()->all()); //aun asi apunte a todos solo va a tener en cuenta los que haya definido en el fillable
+        // Generar el slug a partir del nombre de la categoría
+        $slug = Str::slug(request('name'));
 
+
+        $category = Category::create([
+            'name' => request('name'),
+            'description' => request('description'),
+            'parent_id' => request('parent_id'),
+            'slug' => $slug, // Aquí se asigna el slug
+        ]);
         // return redirect()->back(); ////retorna a la ubicación anterior
         // return redirect()->action([MainController::class, 'index']); ////retorna la vista al metodo del controlador
         return redirect()->route('categories.index'); //retorna la vista a una ruta especifica
@@ -39,7 +50,8 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('categories.create');
+        $categories = Category::all(); // Trae todas las categorías para el selector
+        return view('categories.create', compact('categories'));//pasa la vble $categories a la vista
     }
 
 
@@ -63,7 +75,8 @@ class CategoryController extends Controller
     public function edit($category)
     {
     $category = Category::findOrFail($category);
-    return view('categories.edit', compact('category'));
+    $categories = Category::all(); // Obtener todas las categorías para el dropdown
+    return view('categories.edit', compact('category', 'categories'));
     }
 
 
@@ -78,6 +91,7 @@ class CategoryController extends Controller
     $rules = [
         'name' => ['required', 'max:255'],
         'description' => ['required', 'max:1000'],
+        'parent_id' => ['nullable', 'exists:categories,id'], // Validar que la categoría padre exista
     ];
 
     $request->validate($rules);

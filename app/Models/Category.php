@@ -13,12 +13,19 @@ class Category extends Model
         'name',
         'description',
         'slug',
+        'parent_id', // Campo adicional para la categoría padre
     ];
 
 
-
+    //relación con la categoria padre
     public function products()
     {
         return $this->hasMany(Product::class); // Relación "tiene muchos"
+    }
+
+    //relación con la categoria hija
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']); // Elimina la clave foránea actual
-            $table->foreign('category_id')
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign(['parent_id']); // Elimina la clave foránea actual
+            $table->foreign('parent_id')
                 ->references('id')->on('categories')
                 ->onDelete('set null'); // Crea la clave foránea con la nueva regla
         });
@@ -21,9 +21,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['category_id']); // Elimina la clave con regla set null
-            $table->foreign('category_id')
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign(['parent_id']); // Elimina la clave con regla set null
+            $table->foreign('parent_id')
                 ->references('id')->on('categories')
                 ->onDelete('cascade'); // Vuelve al estado anterior
         });
