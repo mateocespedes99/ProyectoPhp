@@ -4,6 +4,8 @@
 
     <h1>List of Categories</h1>
 
+    {{ $nombre }}
+
     <a class="btn btn-success" href="{{ route('categories.create')}}">Create</a>
 
     @if(empty($categories))
